@@ -78,6 +78,15 @@ async function run() {
             res.send(result);
         });
 
+
+        // Update an existing data
+        app.put('/mytoys/:id', async(req, res) =>{
+            const updatedToy = req.body;
+
+
+        })
+
+
         // Delete a Toy of loggedIn user
         app.delete('/mytoys/:id', async(req, res) => {
             const id = req.params.id;
@@ -86,7 +95,6 @@ async function run() {
             console.log(result);
             res.send(result);
         })
-
 
 
         // Send a ping to confirm a successful connection
