@@ -80,9 +80,10 @@ async function run() {
 
         // Delete a Toy of loggedIn user
         app.delete('/mytoys/:id', async(req, res) => {
-            const id = req.params._id;
+            const id = req.params.id;
             const query = {_id: new ObjectId(id)};
             const result = await alltoysCollection.deleteOne(query);
+            console.log(result);
             res.send(result);
         })
 
