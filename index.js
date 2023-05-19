@@ -80,8 +80,9 @@ async function run() {
 
 
         // Update an existing data
-        app.put('/mytoys/:id', async(req, res) =>{
+        app.patch('/mytoys/:id', async(req, res) =>{
             const updatedToy = req.body;
+            console.log(updatedToy);
 
 
         })
