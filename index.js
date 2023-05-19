@@ -54,6 +54,18 @@ async function run() {
             };
             const result = await alltoysCollection.findOne(query,options);
             res.send(result);
+        });
+
+        // Get data by user
+        app.get('/mytoys', async(req, res) => {
+            let query = {};
+
+            if(req.query?.created_by){
+                query = {created_by: req.query.created_by}
+            }
+
+            const result = await alltoysCollection.find(query).toArray();
+            res.send(result);
         })
 
 
