@@ -69,10 +69,13 @@ async function run() {
             res.send(result);
         })
 
+
         // Add new data in database
         app.post('/addToy', async(req, res) =>{
             const newToy = req.body;
             console.log(newToy);
+            const result = await alltoysCollection.insertOne(newToy);
+            res.send(result);
         });
 
 
