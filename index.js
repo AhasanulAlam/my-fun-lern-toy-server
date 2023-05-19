@@ -34,6 +34,7 @@ async function run() {
             res.send(result);
         });
 
+        // Get specific data by id
         app.get('/toy/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) };
@@ -56,7 +57,7 @@ async function run() {
             res.send(result);
         });
 
-        // Get data by user
+        // Get all data by user
         app.get('/mytoys', async(req, res) => {
             let query = {};
 
@@ -67,6 +68,13 @@ async function run() {
             const result = await alltoysCollection.find(query).toArray();
             res.send(result);
         })
+
+        // Add new data in database
+        app.post('/addToy', async(req, res) =>{
+            const newToy = req.body;
+            console.log(newToy);
+        });
+
 
 
         // Send a ping to confirm a successful connection
