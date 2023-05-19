@@ -78,6 +78,14 @@ async function run() {
             res.send(result);
         });
 
+        // Delete a Toy of loggedIn user
+        app.delete('/mytoys/:id', async(req, res) => {
+            const id = req.params._id;
+            const query = {_id: new ObjectId(id)};
+            const result = await alltoysCollection.deleteOne(query);
+            res.send(result);
+        })
+
 
 
         // Send a ping to confirm a successful connection
