@@ -25,14 +25,8 @@ async function run() {
     try {
         // Connect the client to the server	(optional starting in v4.7)
         // await client.connect();
-        client.connect();
 
         const alltoysCollection = client.db('myFunLearnToy').collection('alltoys');
-
-        //Create Index
-        const indexKeys = { name: 1 };
-        const indexOptions = { name: "name" };
-        const result = await alltoysCollection.createIndex(indexKeys, indexOptions);
 
         // Get all the data
         app.get('/alltoys', async (req, res) => {
@@ -60,7 +54,7 @@ async function run() {
                     description: 1
                 },
             };
-            const result = await alltoysCollection.findOne(query, options);
+            const result = await alltoysCollection.findOne(query, options); //NEED CHECK
             res.send(result);
         });
 
@@ -72,7 +66,6 @@ async function run() {
             const result = await alltoysCollection.findOne(query);
             res.send(result);
         });
-
 
 
         // Get all data by user
@@ -133,18 +126,19 @@ async function run() {
         //Searching route
         app.get("/searchToysByName", async (req, res) => {
             const searchText = req?.query?.search;
+            console.log(searchText);
+            const regex_pattern = '^A.*'
             if(!searchText?.length){
                 const result = await alltoysCollection.find().limit(20).toArray();
                 res.send(result);
             }else{
-                const result = await alltoysCollection.find({name: { $regex: searchText, $options: "i" }}).toArray();
+                const result = await alltoysCollection.find({name: {$regex: searchText}}).toArray();
                 res.send(result);
             }
         });
 
-        
         // Send a ping to confirm a successful connection
-        await client.db("admin").command({ ping: 1 });
+        // await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } finally {
         // Ensures that the client will close when you finish/error
@@ -152,8 +146,6 @@ async function run() {
     }
 }
 run().catch(console.dir);
-
-
 
 
 app.get('/', (req, res) => {
