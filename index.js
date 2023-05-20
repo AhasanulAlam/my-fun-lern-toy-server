@@ -28,6 +28,12 @@ async function run() {
 
         const alltoysCollection = client.db('myFunLearnToy').collection('alltoys');
 
+        //Create Index
+        const indexKeys = { name: 1 };
+        const indexOptions = { name: "name" };
+        const result = await alltoysCollection.createIndex(indexKeys, indexOptions);
+
+        // Get all the data
         app.get('/alltoys', async (req, res) => {
             const cursor = alltoysCollection.find().limit(20);
             const result = await cursor.toArray();
@@ -75,7 +81,7 @@ async function run() {
             if (req.query?.created_by) {
                 query = { created_by: req.query.created_by }
             }
-            const result = await alltoysCollection.find(query).sort({price: -1}).toArray();
+            const result = await alltoysCollection.find(query).sort({ price: -1 }).toArray();
             res.send(result);
         })
 
@@ -110,10 +116,9 @@ async function run() {
                     description: updatedToy.description
                 },
             };
-            const result = await alltoysCollection.updateOne(filter, setUpdatedToy, options );
+            const result = await alltoysCollection.updateOne(filter, setUpdatedToy, options);
             res.send(result);
         })
-
 
         // Delete a Toy of loggedIn user
         app.delete('/mytoys/:id', async (req, res) => {
@@ -123,6 +128,15 @@ async function run() {
             console.log(result);
             res.send(result);
         })
+
+        //Searching route
+        app.get("/searchToysByName/:text", async (req, res) => {
+            const searchText = req.params.text;
+            const result = await alltoysCollection
+                .find({name: { $regex: searchText, $options: "i" }})
+                .toArray();
+            res.send(result);
+        });
 
 
         // Send a ping to confirm a successful connection
