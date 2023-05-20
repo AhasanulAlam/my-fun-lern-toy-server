@@ -130,15 +130,18 @@ async function run() {
         })
 
         //Searching route
-        app.get("/searchToysByName/:text", async (req, res) => {
-            const searchText = req.params.text;
-            const result = await alltoysCollection
-                .find({name: { $regex: searchText, $options: "i" }})
-                .toArray();
-            res.send(result);
+        app.get("/searchToysByName", async (req, res) => {
+            const searchText = req?.query?.search;
+            if(!searchText?.length){
+                const result = await alltoysCollection.find().limit(20).toArray();
+                res.send(result);
+            }else{
+                const result = await alltoysCollection.find({name: { $regex: searchText, $options: "i" }}).toArray();
+                res.send(result);
+            }
         });
 
-
+        
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
