@@ -29,7 +29,7 @@ async function run() {
         const alltoysCollection = client.db('myFunLearnToy').collection('alltoys');
 
         app.get('/alltoys', async (req, res) => {
-            const cursor = alltoysCollection.find();
+            const cursor = alltoysCollection.find().limit(20);
             const result = await cursor.toArray();
             res.send(result);
         });
@@ -75,8 +75,7 @@ async function run() {
             if (req.query?.created_by) {
                 query = { created_by: req.query.created_by }
             }
-
-            const result = await alltoysCollection.find(query).toArray();
+            const result = await alltoysCollection.find(query).sort({price: -1}).toArray();
             res.send(result);
         })
 
